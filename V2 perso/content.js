@@ -1,3 +1,14 @@
+// Coucou toi qui regarde dans le code
+// 
+// 
+// /‾‾‾‾‾\ /‾‾‾‾‾] [‾‾‾‾‾‾‾‾] |‾‾‾‾‾] |‾‾‾‾‾\ |‾‾‾‾‾\ |‾| /‾/
+// | |‾| | | |‾‾‾   ‾‾|  |‾‾  | |‾‾‾  |     | |     | | |/ /
+// | | | | | |        |  |    |  ___] |     / |     / |  _/
+// | |_| | | |___     |  |    | |___  | |\ \  | |\ \  | |
+// \_____/ \_____]    |__|    |_____] |_| \_\ |_| \_\ |_|
+// MADE ON EARTH BY HUMANS
+
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "CHANGE_TRUC") {
     darkMode = message.value
@@ -10,9 +21,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 const isDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 var darkMode = isDarkMode()
 
-// On récupère tout sur la page
-const all = document.getElementsByTagName("*");
 
+// CHANGER LES IMAGES
 // On récupère les boutons à gauches
 const leftButtons = document.getElementsByClassName('accordion-toggle');
 const leftImages = [];
@@ -39,8 +49,34 @@ for (element of leftButtons) { // On descends dans les enfants pour aller cherch
 }
 
 for (let i = 0; i < leftSources.length; i++) {
-    leftImages[i].src = leftSources[i]
+    if (leftImages) {
+        leftImages[i].src = leftSources[i]
+    }
 }
+
+// On récupère le bouton relevé de présence
+const presenceButton = document.getElementsByClassName('breadcrumb')[0];
+const presenceChild = presenceButton.children[ presenceButton.children.length - 1 ];
+const presenceImg = presenceChild.children[0].children[0];
+
+if (presenceImg) { presenceImg.src = chrome.runtime.getURL('sources/clock.svg') }
+
+// On récupère le bouton avec le drapeau du langage
+const languageButton = document.getElementsByClassName('dropdown-toggle')[0];
+const languageImg = languageButton.children[0];
+
+if (languageImg) {
+    languageImg.src = chrome.runtime.getURL('sources/flagFrench.svg');
+    languageImg.style.width = '20px';
+    languageImg.style.height = '15px';
+};
+
+
+
+
+// CHANGER LES COULEURS
+// On récupère tout sur la page
+const all = document.getElementsByTagName("*");
 
 function clearBorders(node) {
     if (!node || !node.style) return;
