@@ -223,7 +223,8 @@ function colorDarkmode() {
             }
 
             if (bg == 'rgb(240, 241, 246)') {
-                element.style.backgroundColor = '#222222';
+                element.classList.add('oldTechnology')
+                element.style.backgroundColor = '#080808'
             }
 
             if (bg == 'rgb(240, 248, 255)') {
@@ -267,7 +268,7 @@ function colorDarkmode() {
             }
 
             if (bg == 'rgb(229, 231, 238)') {
-                element.style.backgroundColor = '#000'
+                element.style.backgroundColor = '#1d1d1d'
             }
 
             if (bg == 'rgb(243, 244, 245)') {
@@ -275,7 +276,7 @@ function colorDarkmode() {
             }
 
             if (bg == 'rgb(245, 245, 245)') {
-                element.style.backgroundColor = '#000'
+                element.style.backgroundColor = '#1d1d1d'
             }
 
             if (bg == 'rgba(243, 244, 245, 0.4)') {
@@ -291,6 +292,7 @@ function colorDarkmode() {
             }
         }
     }
+    console.log( document.getElementsByClassName('oldTechnology') )
 }
 
 // window.addEventListener("resize", function() {
@@ -335,6 +337,12 @@ const BD_PSEUDO_ID = 'bd-pseudo-bg';
         /* Si des pseudo-éléments utilisent des SVG/text, on force aussi */
         *:not(.slide_title)::before svg, *:not(.slide_title)::after svg {
             fill: currentColor !important;
+        }
+
+        .oldTechnology::before,
+        .oldTechnology::after {
+            background-color: black !important;
+            background: black !important;
         }
     `;
     try { (document.head || document.documentElement).appendChild(s); } catch (e) {}
