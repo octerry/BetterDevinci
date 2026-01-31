@@ -65,6 +65,8 @@ const presenceImg = presenceChild.children[0].children[0];
 
 if (presenceImg) { presenceImg.src = chrome.runtime.getURL('sources/clock.svg') }
 
+if (presenceButton) { presenceButton.style.borderBottom = 'none' };
+
 // On récupère le bouton avec le drapeau du langage
 const languageButton = document.getElementsByClassName('dropdown-toggle')[0];
 const languageImg = languageButton.children[0];
@@ -91,7 +93,11 @@ if (tableSalles) { tableSalles.style.border = '#1px solid #000' };
 // Fond stylisé du header warning
 const headerWarning = document.getElementsByClassName('alert-warning')[0];
 
-if (headerWarning) { headerWarning.style.borderRadius = '10px' };
+if (headerWarning) { 
+    headerWarning.style.borderRadius = '10px' 
+    headerWarning.style.border = '1px #c98667 solid'
+};
+
 
 
 // CHANGER LES COULEURS
