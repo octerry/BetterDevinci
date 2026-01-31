@@ -45,7 +45,6 @@ const leftSources = [
 
 for (element of leftButtons) { // On descends dans les enfants pour aller chercher les icons
     leftImages.push(element.children[0])
-    console.log(leftImages)
 }
 
 for (let i = 0; i < leftSources.length; i++) {
@@ -53,6 +52,11 @@ for (let i = 0; i < leftSources.length; i++) {
         leftImages[i].src = leftSources[i]
     }
 }
+
+// On récupère l'image de profil
+const profilAvatar = document.getElementsByClassName('avatar')[0];
+
+if (profilAvatar) { profilAvatar.src = chrome.runtime.getURL('sources/profil.svg') }
 
 // On récupère le bouton relevé de présence
 const presenceButton = document.getElementsByClassName('breadcrumb')[0];
@@ -71,24 +75,28 @@ if (languageImg) {
     languageImg.style.height = '15px';
 };
 
+// Retirer le fond au logo de l'école
+const bgSchoolLogo = document.getElementsByClassName('schoole_pastil')[0];
 
+if (bgSchoolLogo) {
+    bgSchoolLogo.style.border = "none";
+    bgSchoolLogo.style.backgroundColor = "transparent";
+};
+
+// Cadriage bordure de la page des salles
+const tableSalles = document.getElementsByClassName('table table-condensed table-bordered')[0];
+
+if (tableSalles) { tableSalles.style.border = '#1px solid #000' };
+
+// Fond stylisé du header warning
+const headerWarning = document.getElementsByClassName('alert-warning')[0];
+
+if (headerWarning) { headerWarning.style.borderRadius = '10px' };
 
 
 // CHANGER LES COULEURS
 // On récupère tout sur la page
 const all = document.getElementsByTagName("*");
-
-function clearBorders(node) {
-    if (!node || !node.style) return;
-    try {
-        node.style.setProperty('border', '0', 'important');
-    } catch (e) {}
-    node.style.borderStyle = 'none';
-    node.style.borderWidth = '0';
-    node.style.borderColor = 'transparent';
-    node.style.outline = 'none';
-    node.style.boxShadow = 'none';
-}
 
 function updateDarkmode() {
     if (darkMode) {
@@ -148,7 +156,7 @@ function colorDarkmode() {
             }
             
             if (bg == 'rgb(255, 249, 215)') {
-                element.style.backgroundColor = '#68432e'
+                element.style.backgroundColor = '#68432e';
             }
 
             if (bg == 'rgb(255, 235, 232)') {
@@ -156,6 +164,10 @@ function colorDarkmode() {
             }
 
 
+
+            if (bg == 'rgb(229, 229, 229)') {
+                element.style.backgroundColor = '#1f1f1f';
+            }
 
             if (bg == 'rgb(238, 238, 238)') {
                 element.style.backgroundColor = '#1f1f1f';
@@ -222,7 +234,7 @@ function colorDarkmode() {
             }
 
             if (bg == 'rgb(229, 231, 238)') {
-                element.style.backgroundColor = ''
+                element.style.backgroundColor = '#000'
             }
 
             if (bg == 'rgb(243, 244, 245)') {
@@ -266,6 +278,67 @@ const BD_TEXT_ID = 'bd-global-text-white';
         }
     `;
     try { (document.head || document.documentElement).appendChild(s); } catch (e) {}
+})();
+
+// Surcharge des arrière-plans et images des pseudo-éléments (::before / ::after)
+const BD_PSEUDO_ID = 'bd-pseudo-bg';
+(function insertPseudoBgOverride(){
+    if (document.getElementById(BD_PSEUDO_ID)) return;
+    const s = document.createElement('style');
+    s.id = BD_PSEUDO_ID;
+    s.textContent = `
+        /* Forcer le fond des pseudo-éléments et désactiver images/ombres/transitions */
+        *:not(.slide_title)::before, *:not(.slide_title)::after {
+            background: inherit !important;
+            background-color: inherit !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border: none !important;
+            transition: none !important;
+            -webkit-transition: none !important;
+            mix-blend-mode: normal !important;
+        }
+
+        /* Si des pseudo-éléments utilisent des SVG/text, on force aussi */
+        *:not(.slide_title)::before svg, *:not(.slide_title)::after svg {
+            fill: currentColor !important;
+        }
+    `;
+    try { (document.head || document.documentElement).appendChild(s); } catch (e) {}
+
+    // Fonction pour injecter le même style dans un ShadowRoot
+    function addStyleToShadow(shadowRoot) {
+        try {
+            if (!shadowRoot) return;
+            if (shadowRoot.querySelector && shadowRoot.querySelector('#' + BD_PSEUDO_ID)) return;
+            const ss = document.createElement('style');
+            ss.id = BD_PSEUDO_ID;
+            ss.textContent = s.textContent;
+            shadowRoot.appendChild(ss);
+        } catch (e) {}
+    }
+
+    // Injecter dans les shadow roots existants
+    document.querySelectorAll('*').forEach(el => {
+        if (el.shadowRoot) addStyleToShadow(el.shadowRoot);
+    });
+
+    // Observer pour les nouveaux éléments / shadow roots dynamiques
+    const mo = new MutationObserver(muts => {
+        for (const m of muts) {
+            for (const n of (m.addedNodes || [])) {
+                try {
+                    if (n.nodeType === 1) {
+                        if (n.shadowRoot) addStyleToShadow(n.shadowRoot);
+                        // aussi injecter si des enfants avec shadowRoot apparaissent
+                        n.querySelectorAll && n.querySelectorAll('*').forEach(c => { if (c.shadowRoot) addStyleToShadow(c.shadowRoot); });
+                    }
+                } catch (e) {}
+            }
+        }
+    });
+    try { mo.observe(document.documentElement || document, { childList: true, subtree: true }); } catch (e) {}
+
 })();
 
 updateDarkmode()
