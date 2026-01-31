@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "BetterDevinci BÊTA",
+    "version": "1.0",
+    "description": "Rends le site mydevinci plus beau avec un darkmode",
+    "content_scripts": [
+        {
+            "matches": ["https://my.devinci.fr/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["sources/*"],
+            "matches": ["https://my.devinci.fr/*"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    }
+}

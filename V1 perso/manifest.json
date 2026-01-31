@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "BetterDevinci",
+    "version": "0.1",
+    "description": "Rends le site mydevinci plus beau en changeant le css",
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
