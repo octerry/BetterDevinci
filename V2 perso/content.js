@@ -8,18 +8,36 @@
 // \_____/ \_____]    |__|    |_____] |_| \_\ |_| \_\ |_|
 // MADE ON EARTH BY HUMANS
 
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "CHANGE_TRUC") {
-    darkMode = message.value
-
-    updateDarkmode()
-  }
-});
-
 // On vérifie sur le darkmode est activé sur le navigateur
 const isDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 var darkMode = isDarkMode()
+
+
+// On récupère l'image de profil
+const profilAvatar = document.getElementsByClassName('avatar')[0];
+
+if (profilAvatar) { profilAvatar.src = chrome.runtime.getURL('sources/profil.svg') }
+
+// On récupère les choix de l'utilisateur
+let nameValue = '';
+let colorValue = '#363777';
+
+if (chrome.storage) {
+    chrome.storage.local.get(["darkmodeEnabled", "nameValue", "colorValue"], (result) => {
+        if (darkMode) { // On récupère les choix si ils existent
+            darkMode = result.darkmodeEnabled;
+            nameValue = result.nameValue;
+            colorValue = result.colorValue;
+            updateUserPreferences()
+        } else { // Sinon on les défini nous même
+            chrome.storage.local.set({
+                darkmodeEnabled: darkMode,
+                nameValue: profilAvatar.alt,
+                colorValue: '#363777',
+            });
+        }
+    });
+}
 
 
 // CHANGER LES IMAGES
@@ -52,11 +70,6 @@ for (let i = 0; i < leftSources.length; i++) {
         leftImages[i].src = leftSources[i]
     }
 }
-
-// On récupère l'image de profil
-const profilAvatar = document.getElementsByClassName('avatar')[0];
-
-if (profilAvatar) { profilAvatar.src = chrome.runtime.getURL('sources/profil.svg') }
 
 // On récupère le bouton relevé de présence
 const presenceButton = document.getElementsByClassName('breadcrumb')[0];
@@ -104,6 +117,19 @@ if (headerWarning) {
 // On récupère tout sur la page
 const all = document.getElementsByTagName("*");
 
+function updateUserPreferences() {
+    const mainColorElements = document.getElementsByClassName('mainColorElement')
+    const username = document.getElementsByClassName('user')[0].children[1];
+    const username2 = document.getElementsByClassName('navbar-inner-title')[0];
+
+    for (element of mainColorElements) {
+        element.style.backgroundColor = colorValue;
+    }
+
+    username.textContent = nameValue;
+    username2.textContent = nameValue;
+}
+
 function updateDarkmode() {
     if (darkMode) {
         enableDarkmode()
@@ -130,7 +156,8 @@ function colorDarkmode() {
 
         if (bg) {
             if (bg == 'rgb(0, 61, 102)') {
-                element.style.backgroundColor = '#363777';
+                element.classList.add('mainColorElement')
+                element.style.backgroundColor = colorValue;
             }
 
             if (bg == 'rgb(204, 229, 255)') {
