@@ -15,7 +15,6 @@ var darkMode = isDarkMode()
 
 // On récupère l'image de profil
 const profilAvatar = document.getElementsByClassName('avatar')[0];
-console.log(profilAvatar)
 
 if (profilAvatar) { profilAvatar.src = chrome.runtime.getURL('sources/profil.svg') }
 
@@ -26,7 +25,9 @@ let colorValue = '#363777';
 if (chrome.storage) {
     chrome.storage.local.get(["darkmodeEnabled", "nameValue", "colorValue"], (result) => {
         if (darkMode) { // On récupère les choix si ils existent
-            darkMode = result.darkmodeEnabled;
+            if (darkMode != result.darkmodeEnabled) {
+                darkMode = result.darkmodeEnabled;
+            }
             nameValue = result.nameValue;
             colorValue = result.colorValue;
             updateUserPreferences()
@@ -37,6 +38,8 @@ if (chrome.storage) {
                 colorValue: '#363777',
             });
         }
+        colorDarkmode()
+        insertGlobalTextWhite()
     });
 }
 
@@ -198,19 +201,8 @@ function updateUserPreferences() {
     if (helloText) {
         const helloSpan = helloText.children[0];
 
-        console.log(nameValue)
         helloSpan.textContent = `Bienvenue ${nameValue} !`
     }
-}
-
-function updateDarkmode() {
-    if (darkMode) {
-        enableDarkmode()
-    }
-}
-
-function enableDarkmode() {
-    colorDarkmode();
 }
 
 function colorDarkmode() {
@@ -218,7 +210,7 @@ function colorDarkmode() {
         let el = element;
         let bg = getComputedStyle(el).backgroundColor;
 
-        if (el.classList[0] != 'slide_title') {
+        if (el.classList[0] != 'slide_title' && darkMode) {
             el.style.color = '#fff'
         }
 
@@ -228,172 +220,154 @@ function colorDarkmode() {
         }
 
         if (bg) {
-            if (bg == 'rgb(0, 61, 102)' || bg == 'rgb(59, 89, 152)') {
+            if (bg == 'rgb(0, 61, 102)' || bg == 'rgb(59, 89, 152)' || bg == 'rgb(38, 114, 236)') {
                 element.classList.add('mainColorElement')
                 element.style.backgroundColor = colorValue;
             }
 
-            if (bg == 'rgb(204, 229, 255)') {
-                element.style.backgroundColor = '#6179a7';
+            if (bg == 'rgb(204, 229, 255)' || bg == 'rgb(209, 236, 241)' || bg == 'rgb(217, 233, 255)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#6179a7';
+                } else {
+                    element.style.backgroundColor = '#7dabff';
+                }
             }
 
-            if (bg == 'rgb(38, 114, 236)') {
-                element.style.backgroundColor = colorValue;
-            }
-
-            if (bg == 'rgb(209, 236, 241)') {
-                element.style.backgroundColor = '#6179a7';
-            }
-
-            if (bg == 'rgb(217, 233, 255)') {
-                element.style.backgroundColor = '#6197a7';
-            }
-
-            if (bg == 'rgb(223, 240, 216)') {
-                element.style.backgroundColor = '#4a7948';
-            }
-
-            if (bg == 'rgb(212, 237, 218)') {
-                element.style.backgroundColor = '#4a7948';
+            if (bg == 'rgb(223, 240, 216)' || bg == 'rgb(212, 237, 218)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#4a7948';
+                } else {
+                    element.style.backgroundColor = '#c8ffc6';
+                }
             }
 
             if (bg == 'rgb(255, 243, 205)') {
-                element.style.backgroundColor = '#6e6935';
+                if (darkMode) {
+                    element.style.backgroundColor = '#6e6935';
+                } else {
+                    element.style.backgroundColor = '#fffac0';
+                }
             }
 
             if (bg == 'rgb(249, 246, 158)') {
-                element.style.backgroundColor = '#63583c';
-            }
+                if (darkMode) {
+                    element.style.backgroundColor = '#63583c';
+                } else {
+                    element.style.backgroundColor = '#ffefc5';
+                }
+            } 
             
             if (bg == 'rgb(255, 249, 215)') {
-                element.style.backgroundColor = '#68432e';
+                if (darkMode) {
+                    element.style.backgroundColor = '#68432e';
+                } else {
+                    element.style.backgroundColor = '#ffddca';
+                }
             }
 
             if (bg == 'rgb(255, 235, 232)') {
-                element.style.backgroundColor = '#7e2929';
-            }
-
-
-
-            if (bg == 'rgb(229, 229, 229)') {
-                element.style.backgroundColor = '#1f1f1f';
-            }
-
-            if (bg == 'rgb(238, 238, 238)') {
-                element.style.backgroundColor = '#1f1f1f';
-            }
-
-            if (bg == 'rgb(228, 234, 236)') {
-                element.style.backgroundColor = '#1f1f1f';
-            }
-
-            if (bg == 'rgb(250, 251, 251)') {
-                element.style.backgroundColor = '#131313';
-            }
-
-            if (bg == 'rgb(250, 250, 250)') {
-                element.style.backgroundColor = '#131313';
-            }
-
-            if (bg == 'rgb(252, 252, 252)') {
-                element.style.backgroundColor = '#131313';
-            }
-            
-            if (bg == 'rgb(233, 234, 237)') {
-                element.style.backgroundColor = '#080808';
-            }
-
-            if (bg == 'rgb(240, 241, 246)') {
-                element.classList.add('oldTechnology')
-                element.style.backgroundColor = '#080808'
-            }
-
-            if (bg == 'rgb(240, 248, 255)') {
-                element.style.backgroundColor = '#070707';
-            }
-
-            if (bg == 'rgb(236, 239, 246)') {
-                element.style.backgroundColor = '#070707';
-            }
-
-            if (bg == 'rgb(229, 229, 229)') {
-                element.style.backgroundColor = '#292929';
-            }
-
-            if (bg == 'rgb(241, 244, 245)') {
-                element.style.backgroundColor = '#080808';
-            }
-
-            if (bg == 'rgb(212, 212, 212)') {
-                element.style.backgroundColor = '#292929';
-            }
-
-            if (bg == 'rgb(242, 242, 242)') {
-                element.style.backgroundColor = '#0a0a0a';
-            }
-
-            if (bg == 'rgb(247, 247, 247)') {
-                element.style.backgroundColor = '#0a0a0a';
-            }
-
-            if (bg == 'rgb(249, 249, 249)') {
-                element.style.backgroundColor = '#0a0a0a';
+                if (darkMode) {
+                    element.style.backgroundColor = '#7e2929';
+                } else {
+                    element.style.backgroundColor = '#ffc5c5';
+                }
             }
 
             if (bg == 'rgb(248, 201, 196)') {
-                element.style.backgroundColor = '#531313'
+                if (darkMode) {
+                    element.style.backgroundColor = '#531313'
+                } else {
+                    element.style.backgroundColor = '#ffbfbf'
+                }
             }
 
-            if (bg == 'rgb(248, 249, 250)') {
-                element.style.backgroundColor = '#1d1d1d'
+
+
+            if (bg == 'rgb(229, 229, 229)' || bg == 'rgb(238, 238, 238)' || bg == 'rgb(228, 234, 236)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#1f1f1f';
+                }
             }
 
-            if (bg == 'rgb(229, 231, 238)') {
-                element.style.backgroundColor = '#1d1d1d'
+            if (bg == 'rgb(250, 251, 251)' || bg == 'rgb(250, 250, 250)' || bg == 'rgb(252, 252, 252)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#131313';
+                }
             }
 
-            if (bg == 'rgb(243, 244, 245)') {
-                element.style.backgroundColor = '#1d1d1d'
+            if (bg == 'rgb(233, 234, 237)' || bg == 'rgb(240, 241, 246)' || bg == 'rgb(241, 244, 245)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#080808';
+                }
             }
 
-            if (bg == 'rgb(245, 245, 245)') {
-                element.style.backgroundColor = '#1d1d1d'
+            if (bg == 'rgb(240, 248, 255)' || bg == 'rgb(236, 239, 246)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#070707';
+                }
+            }
+
+            if (bg == 'rgb(229, 229, 229)' || bg == 'rgb(212, 212, 212)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#292929';
+                }
+            }
+
+            if (bg == 'rgb(242, 242, 242)' || bg == 'rgb(247, 247, 247)' || bg == 'rgb(249, 249, 249)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#0a0a0a';
+                }
+            }
+
+            if (bg == 'rgb(248, 249, 250)' || bg == 'rgb(229, 231, 238)' || bg == 'rgb(243, 244, 245)' || bg == 'rgb(245, 245, 245)') {
+                if (darkMode) {
+                    element.style.backgroundColor = '#1d1d1d'
+                }
             }
 
             if (bg == 'rgba(243, 244, 245, 0.4)') {
-                element.style.backgroundColor = '#00000060'
+                if (darkMode) {
+                    element.style.backgroundColor = '#00000060'
+                }
             }
 
             if (bg == 'rgba(255, 255, 255, 0.9)') {
-                element.style.backgroundColor = '#000000E0'
+                if (darkMode) {
+                    element.style.backgroundColor = '#000000E0'
+                }
             }
 
             if (bg == 'rgb(255, 255, 255)') {
-                element.style.backgroundColor = '#101010';
+                if (darkMode) {
+                    element.style.backgroundColor = '#101010';
+                }
             }
         }
     }
+    console.log('jy suis')
 }
 
 // window.addEventListener("resize", function() {
 // })
 
 const BD_TEXT_ID = 'bd-global-text-white';
-(function insertGlobalTextWhite(){
+function insertGlobalTextWhite(){
     if (document.getElementById(BD_TEXT_ID)) return;
     const s = document.createElement('style');
     s.id = BD_TEXT_ID;
-    s.textContent = `
-        *:not(.slide_title)::before, *:not(.slide_title)::after {
-            color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
-        }
+    if (darkMode) {
+        s.textContent = `
+            *:not(.slide_title)::before, *:not(.slide_title)::after {
+                color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
+            }
 
-        svg text, svg tspan {
-            fill: #ffffff !important;
-        }
-    `;
+            svg text, svg tspan {
+                fill: #ffffff !important;
+            }
+        `;
+    }
     try { (document.head || document.documentElement).appendChild(s); } catch (e) {}
-})();
+};
 
 // Surcharge des arrière-plans et images des pseudo-éléments (::before / ::after)
 const BD_PSEUDO_ID = 'bd-pseudo-bg';
@@ -461,5 +435,3 @@ const BD_PSEUDO_ID = 'bd-pseudo-bg';
     try { mo.observe(document.documentElement || document, { childList: true, subtree: true }); } catch (e) {}
 
 })();
-
-updateDarkmode()
