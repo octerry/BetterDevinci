@@ -182,7 +182,6 @@ for (element of moduleElements) {
 const all = document.getElementsByTagName("*");
 
 function updateUserPreferences() {
-    const helloText = document.getElementsByClassName('devinci-plugin-title')[0];
     const mainColorElements = document.getElementsByClassName('mainColorElement')
     const userParent = document.getElementsByClassName('user')[0]
     let username = null;
@@ -190,6 +189,9 @@ function updateUserPreferences() {
         username = userParent.children[1];
     }
     const username2 = document.getElementsByClassName('navbar-inner-title')[0];
+    const username3 = document.getElementsByClassName('nav-name text-light')[0];
+    const helloText = document.getElementsByClassName('devinci-plugin-title')[0];
+    const printText = document.getElementsByClassName('page-title')[0];
 
     for (element of mainColorElements) {
         element.style.backgroundColor = colorValue;
@@ -197,6 +199,8 @@ function updateUserPreferences() {
 
     if (username) { username.textContent = nameValue };
     if (username2) { username2.textContent = nameValue };
+    if (username3) { username3.textContent = nameValue };
+    if (printText) { printText.textContent = `Impression ${nameValue}`}
 
     if (helloText) {
         const helloSpan = helloText.children[0];
