@@ -20,9 +20,9 @@ if (profilAvatar) { profilAvatar.src = chrome.runtime.getURL('sources/profil.svg
 
 // On récupère les choix de l'utilisateur
 let nameValue = '';
-let colorValue = '#363777';
+let colorValue = '#4f3677';
 
-if (chrome.storage) {
+if (chrome.storage) { 
     chrome.storage.local.get(["darkmodeEnabled", "nameValue", "colorValue"], (result) => {
         if (darkMode) { // On récupère les choix si ils existent
             if (darkMode != result.darkmodeEnabled) {
@@ -30,13 +30,8 @@ if (chrome.storage) {
             }
             nameValue = result.nameValue;
             colorValue = result.colorValue;
+            console.log(colorValue)
             updateUserPreferences()
-        } else { // Sinon on les défini nous même
-            chrome.storage.local.set({
-                darkmodeEnabled: darkMode,
-                nameValue: profilAvatar.alt,
-                colorValue: '#363777',
-            });
         }
         colorDarkmode()
         insertGlobalTextWhite()
@@ -182,6 +177,7 @@ for (element of moduleElements) {
 const all = document.getElementsByTagName("*");
 
 function updateUserPreferences() {
+    console.log('polo')
     const mainColorElements = document.getElementsByClassName('mainColorElement')
     const userParent = document.getElementsByClassName('user')[0]
     let username = null;
@@ -225,8 +221,9 @@ function colorDarkmode() {
 
         if (bg) {
             if (bg == 'rgb(0, 61, 102)' || bg == 'rgb(59, 89, 152)' || bg == 'rgb(38, 114, 236)') {
-                element.classList.add('mainColorElement')
+                console.log(colorValue)
                 element.style.backgroundColor = colorValue;
+                element.classList.add('mainColorElement');
             }
 
             if (bg == 'rgb(204, 229, 255)' || bg == 'rgb(209, 236, 241)' || bg == 'rgb(217, 233, 255)') {
@@ -284,8 +281,6 @@ function colorDarkmode() {
                     element.style.backgroundColor = '#ffbfbf'
                 }
             }
-
-
 
             if (bg == 'rgb(229, 229, 229)' || bg == 'rgb(238, 238, 238)' || bg == 'rgb(228, 234, 236)') {
                 if (darkMode) {
@@ -348,7 +343,6 @@ function colorDarkmode() {
             }
         }
     }
-    console.log('jy suis')
 }
 
 // window.addEventListener("resize", function() {

@@ -15,6 +15,7 @@ let nameValue = 'Votre nom';
 const colorInput = document.getElementById('colorInput');
 let colorValue = '#363777';
 const saveButton = document.getElementById('saveButton');
+const illu = document.getElementById('illu')
 
 if (chrome.storage) {
     chrome.storage.local.get(["darkmodeEnabled", "nameValue", "colorValue"], (result) => {
@@ -46,9 +47,13 @@ function update() {
     if (toggle1.checked) {
         document.body.style.backgroundColor = '#121212';
         document.body.style.color = '#fff';
+        illu.src = 'sources/illustrationDark.svg'
+        saveButton.style.backgroundColor = "#224223"
     } else {
         document.body.style.backgroundColor = '#fff';
         document.body.style.color = '#000';
+        illu.src = 'sources/illustrationLight.svg'
+        saveButton.style.backgroundColor = "#a1ca99"
     }
 }
 
